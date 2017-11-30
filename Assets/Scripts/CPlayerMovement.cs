@@ -42,8 +42,12 @@ public class CPlayerMovement : MonoBehaviour
     private void Update()
     {
         Move();
-        Jump();
         DetectPlayerTouchingGround();
+    }
+
+    private void FixedUpdate()
+    {
+        Jump();
     }
 
     /// <summary>
@@ -66,10 +70,7 @@ public class CPlayerMovement : MonoBehaviour
     private void Jump()
     {
         if(isTouchingGround && Input.GetAxis("Jump") > 0f)
-        {
-            animator.SetBool("Jumping", true);
             rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
     }
 
     /// <summary>
@@ -80,8 +81,6 @@ public class CPlayerMovement : MonoBehaviour
     {
         isTouchingGround = Physics2D.OverlapCircle(groundPoint.position, groundDetectionDistance,
             groundLayerMask);
-        if (isTouchingGround)
-            animator.SetBool("Jumping", false);
-        else animator.SetBool("Jumping", true);
+        animator.SetBool("Jumping", !isTouchingGround);
     }
 }
